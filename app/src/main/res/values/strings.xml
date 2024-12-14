@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Тренируем счет</string>
+    <string name="start_btn">Начать</string>
+
+    <string name="level_name">Уровень %d</string>
+    <string name="timer_name">Время: %d с</string>
+    <string name="system_text">Система счисления: %d-ичная</string>
+
+    <string name="correct_text">Верно</string>
+    <string name="incorrect_text">Неверно</string>
+
+    <string name="yes_btn">Да</string>
+    <string name="no_btn">Нет</string>
+    <string name="user_input_text">Ваш ответ</string>
+    <string name="check_btn">Проверить</string>
+    <string name="next_btn">Далее</string>
+
+    <string name="error_name">Ошибка</string>
+    <string name="error_input_text">Некорректный ввод</string>
+    <string name="ok_btn">Ок</string>
+
+    <string name="lose_errors_text">Игра окончена. Вы дали 3 неверных ответа</string>
+    <string name="lose_timer_text">Игра окончена. Время истекло</string>
+
+    <string name="restart_text">Вы хотите начать игру заново?</string>
+    <string name="restart_btn">Начать заново</string>
+    <string name="exit_btn">Выйти из игры</string>
+
+</resources>
