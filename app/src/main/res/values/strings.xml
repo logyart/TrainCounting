@@ -20,9 +20,9 @@
     <string name="ok_btn">Ок</string>
 
     <string name="lose_errors_text">Игра окончена. Вы дали 3 неверных ответа</string>
-    <string name="lose_timer_text">Игра окончена. Время истекло</string>
+    <string name="lose_timer_text">Время истекло</string>
 
-    <string name="restart_text">Вы хотите начать игру заново?</string>
+    <string name="restart_text">Хотите начать игру заново?</string>
     <string name="restart_btn">Начать заново</string>
     <string name="exit_btn">Выйти из игры</string>
 

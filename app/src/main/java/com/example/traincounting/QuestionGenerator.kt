@@ -5,17 +5,17 @@ import kotlin.random.Random
 object QuestionGenerator {
 
     // Генерация вопроса
-    fun generate(level: Int, isInputMode: Boolean): Question {
+    fun generate(difficultly: Int, isInputMode: Boolean): Question {
         val system = listOf(2, 8, 16).random() // Выбор системы счисления
-        val numOperations = (1..3).random().coerceAtMost(level) // Количество операций, максимум 3
+        val numOperations = (1..3).random().coerceAtMost(difficultly) // Количество операций, максимум 3
         val expressionParts = mutableListOf<String>()
 
-        var result = Random.nextInt(1, level * 10)
+        val result = Random.nextInt(1, difficultly * 10)
         var currentResult = result
         expressionParts.add(Integer.toString(result, system).uppercase())
 
         repeat(numOperations) {
-            val nextNum = Random.nextInt(1, level * 10)
+            val nextNum = Random.nextInt(1, difficultly * 10)
             val operation = listOf("+", "-").random()
 
             currentResult = when (operation) {
@@ -30,7 +30,7 @@ object QuestionGenerator {
 
         val resultConverted = Integer.toString(currentResult, system).uppercase()
         var questionText = expressionParts.joinToString(" ")
-        var expression = "$questionText = $resultConverted"
+        val expression = "$questionText = $resultConverted"
         if (isInputMode) {
             return Question("$questionText =", expression, resultConverted, system)
         }
@@ -38,8 +38,8 @@ object QuestionGenerator {
         val comparisonOp = listOf("=", "<", ">").random()
         val comparisonResult = listOf(
             currentResult,
-            currentResult + Random.nextInt(1, level + 1),
-            currentResult - Random.nextInt(1, level + 1),
+            currentResult + Random.nextInt(1, difficultly + 1),
+            currentResult - Random.nextInt(1, difficultly + 1),
         ).random()
 
         val comparisonConverted = Integer.toString(comparisonResult, system).uppercase()

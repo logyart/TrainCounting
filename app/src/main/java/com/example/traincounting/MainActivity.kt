@@ -15,8 +15,8 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by viewModels()
     private lateinit var timer: CountDownTimer
 
-    private var errors = 0
     private var maxLives = 3
+    private var lives = maxLives
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.currentQuestion.observe(this) { question ->
             binding.questionText.text = question.text
             binding.systemText.text = getString(R.string.system_text, question.system)
+
             updateUiMode()
             startTimer(viewModel.timeLimit.value?.times(1000L) ?: 30_000L)
         }
@@ -54,9 +55,10 @@ class MainActivity : AppCompatActivity() {
         val currentQuestion = viewModel.currentQuestion.value ?: return
 
         if (userAnswer == currentQuestion.isCorrectQuestion) {
-            showFeedback(R.string.correct_text, currentQuestion.expression, R.color.green)
+            showFeedback(getString(R.string.correct_text) + ": " + currentQuestion.expression, R.color.green)
         } else {
-            handleWrongAnswer(currentQuestion.expression)
+            showFeedback(getString(R.string.incorrect_text) + ": " + currentQuestion.expression, R.color.red)
+            removeLife()
         }
 
         finishCurrentRound()
@@ -78,26 +80,19 @@ class MainActivity : AppCompatActivity() {
         binding.userInput.isEnabled = false
 
         if (userInput == currentQuestion.result) {
-            showFeedback(R.string.correct_text, currentQuestion.expression, R.color.green)
+            showFeedback(getString(R.string.correct_text) + ": " + currentQuestion.expression, R.color.green)
         } else {
-            handleWrongAnswer(currentQuestion.expression)
+            showFeedback(getString(R.string.incorrect_text) + ": " + currentQuestion.expression, R.color.red)
+            removeLife()
         }
 
         finishCurrentRound()
     }
 
-    private fun handleWrongAnswer(correctAnswer: String) {
-        errors++
-        showFeedback(R.string.incorrect_text, correctAnswer, R.color.red)
-        removeLife()
-
-        if (errors >= maxLives) {
-            showGameOverDialog(R.string.lose_errors_text)
-        }
-    }
 
     private fun finishCurrentRound() {
         binding.checkButton.isEnabled = false
+        binding.userInput.isEnabled = false
         binding.yesButton.isEnabled = false
         binding.noButton.isEnabled = false
         binding.nextButton.visibility = android.view.View.VISIBLE
@@ -138,8 +133,10 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                handleWrongAnswer(getString(R.string.lose_timer_text))
-                binding.nextButton.visibility = android.view.View.VISIBLE
+                val currentQuestion = viewModel.currentQuestion.value ?: return
+                showFeedback(getString(R.string.lose_timer_text) + ": " + currentQuestion.expression, R.color.red)
+                removeLife()
+                finishCurrentRound()
             }
         }
 
@@ -148,6 +145,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupLives(maxLives: Int) {
         binding.livesContainer.removeAllViews()
+        lives = maxLives
 
         for (i in 0 until maxLives) {
             val heart = ImageView(this)
@@ -158,29 +156,33 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun removeLife() {
-        if (binding.livesContainer.childCount > 0) {
+        if (lives > 0) {
+            lives--
             binding.livesContainer.removeViewAt(binding.livesContainer.childCount - 1)
+        }
+        if (lives == 0) {
+            showGameOverDialog(getString(R.string.lose_errors_text))
         }
     }
 
-    private fun showFeedback(messageRes: Int, correctAnswer: String, colorRes: Int) {
+    private fun showFeedback(message: String, colorRes: Int) {
         binding.answerFeedbackText.apply {
-            text = getString(messageRes) + ": $correctAnswer"
+            text = message
             setTextColor(resources.getColor(colorRes, theme))
             visibility = android.view.View.VISIBLE
         }
     }
 
-    private fun showGameOverDialog(titleRes: Int) {
+    private fun showGameOverDialog(title: String) {
         AlertDialog.Builder(this)
-            .setTitle(titleRes)
+            .setTitle(title)
             .setMessage(R.string.restart_text)
             .setCancelable(false) // Запрещаем закрытие по пустому экрану
             .setPositiveButton(R.string.restart_btn) { _, _ ->
                 restartGame()
             }
             .setNegativeButton(R.string.exit_btn) { dialog, _ ->
-                dialog.dismiss();
+                dialog.dismiss()
                 finishAffinity()
             }
             .create()
@@ -197,7 +199,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun restartGame() {
-        errors = 0
         setupLives(maxLives)
         viewModel.resetGame()
         binding.answerFeedbackText.visibility = android.view.View.INVISIBLE
