@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Тренируем счет</string>
+    <string name="start_text">%s, готов?</string>
     <string name="start_btn">Начать</string>
+    <string name="player_name">Игрок</string>
 
     <string name="level_name">Уровень %d</string>
     <string name="timer_name">Время: %d с</string>
@@ -25,5 +27,19 @@
     <string name="restart_text">Хотите начать игру заново?</string>
     <string name="restart_btn">Начать заново</string>
     <string name="exit_btn">Выйти из игры</string>
+
+    <string name="username_input_text">Ник</string>
+    <string name="password_input_text">Пароль</string>
+    <string name="register_btn">Зарегистрироваться</string>
+    <string name="login_btn">Войти</string>
+    <string name="logout_btn">Выйти из аккаунта</string>
+
+    <string name="auth_title">Авторизация</string>
+    <string name="auth_empty_warning">Введите все данные</string>
+    <string name="auth_user_exist_warning">Неверный логин или пароль</string>
+    <string name="auth_name_warning">Пользователь с таким именем уже существует</string>
+    <string name="auth_password_warning">Пароль должен состоять не менее, чем из 6 символов</string>
+    <string name="auth_username_warning">Имя должно состоять не менее, чем из 2 символов</string>
+    <string name="auth_ok_message">Регистрация завершена. Войдите в свой аккаунт</string>
 
 </resources>

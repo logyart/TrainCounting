@@ -14,10 +14,40 @@ class StartActivity : AppCompatActivity() {
         binding = ActivityStartBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Обработчик нажатия кнопки
-        binding.startButton.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+        // Проверяем, авторизован ли пользователь
+        val sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE)
+        val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
+
+        if (!isLoggedIn) {
+            // Пользователь не авторизован, переходим к LoginActivity
+            goToActivity(LoginActivity::class.java)
+            finish()
         }
+
+        val username = (sharedPreferences.getString("username", null)) ?:
+            getString(R.string.player_name)
+
+        binding.startText.text = getString(R.string.start_text, username)
+
+
+        binding.startButton.setOnClickListener {
+            goToActivity(MainActivity::class.java)
+        }
+
+        binding.logoutButton.setOnClickListener {
+            sharedPreferences.edit().putBoolean("isLoggedIn", false).apply()
+
+            val intent = Intent(this, StartActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+    }
+
+
+    private fun goToActivity(activity: Class<*>) {
+        val intent = Intent(this, activity)
+        startActivity(intent)
+
     }
 }

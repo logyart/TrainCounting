@@ -55,9 +55,15 @@ class MainActivity : AppCompatActivity() {
         val currentQuestion = viewModel.currentQuestion.value ?: return
 
         if (userAnswer == currentQuestion.isCorrectQuestion) {
-            showFeedback(getString(R.string.correct_text) + ": " + currentQuestion.expression, R.color.green)
+            showFeedback(
+                getString(R.string.correct_text) + ": " + currentQuestion.expression,
+                R.color.green
+            )
         } else {
-            showFeedback(getString(R.string.incorrect_text) + ": " + currentQuestion.expression, R.color.red)
+            showFeedback(
+                getString(R.string.incorrect_text) + ": " + currentQuestion.expression,
+                R.color.red
+            )
             removeLife()
         }
 
@@ -69,20 +75,23 @@ class MainActivity : AppCompatActivity() {
         val userInput = binding.userInput.text.toString().uppercase()
 
         if (userInput.isEmpty()) {
-            showErrorDialog(
-                titleRes = R.string.error_name,
-                messageRes = R.string.error_input_text,
-                okBtnRes = R.string.ok_btn
-            )
+            showErrorDialog(getString(R.string.error_input_text))
             return
         }
 
         binding.userInput.isEnabled = false
 
         if (userInput == currentQuestion.result) {
-            showFeedback(getString(R.string.correct_text) + ": " + currentQuestion.expression, R.color.green)
+            showFeedback(
+                getString(R.string.correct_text) + ": " + currentQuestion.expression,
+                R.color.green
+            )
+
         } else {
-            showFeedback(getString(R.string.incorrect_text) + ": " + currentQuestion.expression, R.color.red)
+            showFeedback(
+                getString(R.string.incorrect_text) + ": " + currentQuestion.expression,
+                R.color.red
+            )
             removeLife()
         }
 
@@ -134,7 +143,10 @@ class MainActivity : AppCompatActivity() {
 
             override fun onFinish() {
                 val currentQuestion = viewModel.currentQuestion.value ?: return
-                showFeedback(getString(R.string.lose_timer_text) + ": " + currentQuestion.expression, R.color.red)
+                showFeedback(
+                    getString(R.string.lose_timer_text) + ": " + currentQuestion.expression,
+                    R.color.red
+                )
                 removeLife()
                 finishCurrentRound()
             }
@@ -150,7 +162,9 @@ class MainActivity : AppCompatActivity() {
         for (i in 0 until maxLives) {
             val heart = ImageView(this)
             heart.setImageResource(R.drawable.ic_heart)
-            heart.layoutParams = LinearLayout.LayoutParams(100, 100).apply { marginEnd = 8 }
+            heart.layoutParams = LinearLayout.LayoutParams(100, 100).apply {
+                marginEnd = 8
+            }
             binding.livesContainer.addView(heart)
         }
     }
@@ -189,11 +203,15 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun showErrorDialog(titleRes: Int, messageRes: Int, okBtnRes: Int) {
+    private fun showErrorDialog(
+        message: String,
+        title: String = getString(R.string.error_name),
+        okBtn: String = getString(R.string.ok_btn)
+    ) {
         AlertDialog.Builder(this)
-            .setTitle(titleRes)
-            .setMessage(messageRes)
-            .setPositiveButton(okBtnRes) { dialog, _ -> dialog.dismiss() }
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton(okBtn) { dialog, _ -> dialog.dismiss() }
             .create()
             .show()
     }
